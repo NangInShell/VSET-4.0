@@ -144,6 +144,30 @@ const RealesrganModel_options = [
     value: 'animevideo-xsx4',
     label: 'animevideo-xsx4',
   },
+  {
+    value: 'animejanaiV2L1',
+    label: 'animejanaiV2L1',
+  },
+  {
+    value: 'animejanaiV2L2',
+    label: 'animejanaiV2L2',
+  },
+  {
+    value: 'animejanaiV2L3',
+    label: 'animejanaiV2L3',
+  },
+  {
+    value: 'animejanaiV3-HD-L1',
+    label: 'animejanaiV3-HD-L1',
+  },
+  {
+    value: 'animejanaiV3-HD-L2',
+    label: 'animejanaiV3-HD-L2',
+  },
+  {
+    value: 'animejanaiV3-HD-L3',
+    label: 'animejanaiV3-HD-L3',
+  },
 ]
 
 const RealesrganScale_options = [

@@ -242,7 +242,9 @@
     RealesrganScale_options ,Waifu2xModel_options} from '../store/SRMethod.vue'
   
   const changeSelect = (value: string) => {
-    InferenceValue.value = 'Cuda'; 
+    RealcuganInferenceValue.value = 'Cuda'; 
+    RealesrganInferenceValue.value = 'Cuda'; 
+    Waifu2xInferenceValue.value = 'Cuda'; 
     SRMethodValue.value = value; 
   };
   </script>
