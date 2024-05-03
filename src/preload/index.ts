@@ -1,8 +1,18 @@
-import { contextBridge } from 'electron'
+import { contextBridge,ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  selectDirectory:() => {
+    return ipcRenderer.invoke('selectDirectory')
+  },
+  getCpuInfo:() => {
+    return ipcRenderer.invoke('getCpuInfo')
+  },
+  getGpuInfo:() => {
+    return ipcRenderer.invoke('getGpuInfo')
+  },
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

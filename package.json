@@ -28,6 +28,7 @@
     "element-plus": "^2.6.1",
     "naive-ui": "^2.38.1",
     "pinia": "^2.1.7",
+    "systeminformation": "^5.22.6",
     "vicons": "^0.0.1",
     "vue-router": "^4.3.0"
   },

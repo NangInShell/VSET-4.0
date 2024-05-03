@@ -1,7 +1,17 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow,ipcMain,ipcRenderer,dialog  } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { RunCommand } from './RunCommand'
+
+import { spawn } from 'child_process'
+import ipc from './ipc'
+
+const appPath = app.getAppPath();
+
+const path = require('path');
+const fs = require('fs');
+
 
 function createWindow(): void {
   // Create the browser window.
@@ -35,6 +45,7 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
 }
 
 
@@ -48,14 +59,36 @@ app.whenReady().then(() => {
   })
 
 
+  ipcMain.on('execute-command', RunCommand)
+  ipcMain.on('generate-json', (event, data) => {
+    // console.log(appPath, 'json', 'setting.json');
+    const filePath = path.join(appPath, 'json', 'setting.json');
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+  });
+
+  ipcMain.on('open-folder-dialog', (event) => {
+    dialog.showOpenDialog({
+      properties: ['openDirectory'],
+    }).then(result => {
+      if (!result.canceled) {
+        event.sender.send('selected-folder', result.filePaths[0]);
+      }
+    }).catch(err => {
+      console.error('Error opening folder dialog:', err);
+    });
+  });
+
+
   ipcMain.on('ping', () => console.log('pong'))
 
   ipcMain.on('upload-file', (event, filePath) => {
-    console.log('File path:', filePath);
+  console.log('File path:', filePath);
 
   });
 
-  createWindow()
+  // createWindow()
+  const win = createWindow()
+  ipc(win)
 
   app.on('activate', function () {
 

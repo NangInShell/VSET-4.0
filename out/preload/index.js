@@ -1,7 +1,17 @@
 "use strict";
 const electron = require("electron");
 const preload = require("@electron-toolkit/preload");
-const api = {};
+const api = {
+  selectDirectory: () => {
+    return electron.ipcRenderer.invoke("selectDirectory");
+  },
+  getCpuInfo: () => {
+    return electron.ipcRenderer.invoke("getCpuInfo");
+  },
+  getGpuInfo: () => {
+    return electron.ipcRenderer.invoke("getGpuInfo");
+  }
+};
 if (process.contextIsolated) {
   try {
     electron.contextBridge.exposeInMainWorld("electron", preload.electronAPI);

@@ -1,256 +1,58 @@
 <script setup lang="ts">
-    import { ref,computed  } from 'vue'
-    const value1 = ref(20)
-    const value2 = ref(16)
+import {computed } from 'vue'
+import useOutputconfigStore from '@renderer/store/OutputStote'
+import {storeToRefs} from 'pinia'
+const OutputConfigStore = useOutputconfigStore()
+const {
+    bitValue,
+    crfValue,
+    encoderValue,
+    qualityValue,
+    videoContainer,
+    AudioContainer,
+    isUseCrf,
 
-    const encoderValue = ref('')
-    const qualityValue= ref('')
-    const videoContainer=ref('MP4')
-    const AudioContainer=ref('AAC')
+    isSaveAudio,
+    encoder_options,
+    CpuH265_options,
+    CpuH264_options,
 
+    CpuAv1_options,
+    NvencH265_options,
+    NvencH264_options,
+    NvencAv1_options,
 
-    const isUseCrf=ref(true)
-    const isSaveAudio=ref(false)
-    const encoder_options = [
-  {
-    value: 'libx265',
-    label: 'CPU_H265',
-  },
-  {
-    value: 'libx264',
-    label: 'CPU_H264',
-  },
-  {
-    value: 'libaom-av1',
-    label: 'CPU_Av1',
-  },
-  {
-    value: 'hevc_nvenc',
-    label: 'NVENC_H265',
-  },
-  {
-    value: 'h264_nvenc',
-    label: 'NVENC_H264',
-  },
-  {
-    value: 'av1_nvenc',
-    label: 'NVENC_Av1',
-  },
-]
-
-const CpuH265_options = [
-  {
-    value: 'veryslow',
-    label: 'veryslow',
-  },
-  {
-    value: 'slower',
-    label: 'slower',
-  },
-  {
-    value: 'slow',
-    label: 'slow',
-  },
-  {
-    value: 'medium',
-    label: 'medium',
-  },
-  {
-    value: 'fast',
-    label: 'fast',
-  },
-  {
-    value: 'faster',
-    label: 'faster',
-  },
-  {
-    value: 'veryfast',
-    label: 'veryfast',
-  },
-]
-
-const CpuH264_options = CpuH265_options
-const CpuAv1_options = CpuH265_options
-
-const NvencH265_options = [
-  {
-    value: 'slow',
-    label: 'slow',
-  },
-  {
-    value: 'medium',
-    label: 'medium',
-  },
-  {
-    value: 'fast',
-    label: 'fast',
-  },
-  {
-    value: 'hp',
-    label: 'hp',
-  },
-  {
-    value: 'hq',
-    label: 'hq',
-  },
-  {
-    value: 'bd',
-    label: 'bd',
-  },
-  {
-    value: 'll',
-    label: 'll',
-  },
-  {
-    value: 'llhq',
-    label: 'llhq',
-  },
-  {
-    value: 'llhp',
-    label: 'llhp',
-  },
-  {
-    value: 'p1',
-    label: 'p1',
-  },
-  {
-    value: 'p2',
-    label: 'p2',
-  },
-  {
-    value: 'p3',
-    label: 'p3',
-  },
-  {
-    value: 'p4',
-    label: 'p4',
-  },
-  {
-    value: 'p5',
-    label: 'p5',
-  },
-  {
-    value: 'p6',
-    label: 'p6',
-  },
-  {
-    value: 'p7',
-    label: 'p7',
-  },
-
-]
-
-const NvencH264_options=[
-{
-    value: 'slow',
-    label: 'slow',
-  },
-  {
-    value: 'medium',
-    label: 'medium',
-  },
-  {
-    value: 'fast',
-    label: 'fast',
-  },
-  {
-    value: 'hp',
-    label: 'hp',
-  },
-  {
-    value: 'hq',
-    label: 'hq',
-  },
-  {
-    value: 'bd',
-    label: 'bd',
-  },
-  {
-    value: 'll',
-    label: 'll',
-  },
-  {
-    value: 'llhq',
-    label: 'llhq',
-  },
-  {
-    value: 'llhp',
-    label: 'llhp',
-  }
-]
-
-const NvencAv1_options=[
-{
-    value: 'slow',
-    label: 'slow',
-  },
-  {
-    value: 'medium',
-    label: 'medium',
-  },
-  {
-    value: 'fast',
-    label: 'fast',
-  },
-  {
-    value: 'hp',
-    label: 'hp',
-  },
-  {
-    value: 'hq',
-    label: 'hq',
-  },
-]
+    VideoContainer_options,
+    AudioContainer_options,
+    outputfolder
+  } = storeToRefs(OutputConfigStore)
 
 const qualityPresets = computed(() => {
     switch (encoderValue.value) {
       case 'libx265':
-        return CpuH265_options;
+        return CpuH265_options.value;
       case 'libx264':
-        return CpuH264_options;
+        return CpuH264_options.value;
       case 'libaom-av1':
-        return CpuAv1_options;
+        return CpuAv1_options.value;
       case 'hevc_nvenc':
-        return NvencH265_options;
+        return NvencH265_options.value;
       case 'h264_nvenc':
-        return NvencH264_options;
+        return NvencH264_options.value;
       case 'av1_nvenc':
-        return NvencAv1_options;
+        return NvencAv1_options.value;
     }
   });
 
- 
-
-  const VideoContainer_options = [
-  {
-    value: 'mp4',
-    label: 'MP4',
-  },
-  {
-    value: 'mkv',
-    label: 'MKV',
-  },
-  {
-    value: 'mov',
-    label: 'MOV',
-  }
-]
-
-const AudioContainer_options = [
-  {
-    value: 'aac',
-    label: 'AAC',
-  },
-  {
-    value: 'flac',
-    label: 'FLAC',
-  },
-]
 
 const changeSelect = (value: string) => {
   qualityValue.value = 'slow'; 
   encoderValue.value = value; 
 };
+
+const selectDirectory = async () => {
+  outputfolder.value = await window.api.selectDirectory()
+    };
 
 </script>
 
@@ -296,11 +98,11 @@ const changeSelect = (value: string) => {
 
 <div class="slider-demo-block" v-if="!isUseCrf">
     <span class="demonstration">码率(M)</span>
-    <el-slider v-model="value1" :min="1" :max="100" show-input style="max-width: 500px;"/>
+    <el-slider v-model="bitValue" :min="1" :max="100" show-input style="max-width: 500px;"/>
   </div>
   <div class="slider-demo-block" v-if="isUseCrf">
     <span class="demonstration">CRF</span>
-    <el-slider v-model="value2" :min="1" :max="50" show-input style="max-width: 500px;"/>
+    <el-slider v-model="crfValue" :min="1" :max="50" show-input style="max-width: 500px;"/>
   </div>
 
   <div class="slider-demo-block">
@@ -344,6 +146,18 @@ const changeSelect = (value: string) => {
         :value="item.value"
       />
     </el-select>
+  </div>
+  <div class="slider-demo-block">
+    <span class="demonstration">输出文件夹</span>
+    <el-input
+      v-model="outputfolder"
+      style="max-width: 600px"
+      placeholder="请设置输出文件夹"
+    >
+    <template #prepend>
+      <el-button size="large" type="primary" @click="selectDirectory">点击选择</el-button>
+      </template>
+    </el-input>
   </div>
 
 </div>

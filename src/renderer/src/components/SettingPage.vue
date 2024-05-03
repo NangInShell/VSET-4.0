@@ -6,8 +6,8 @@
 
 <div class="flex-container">
     <div class="mb-4">
-      <el-button :icon="MessageBox" type="success" @click="clearFileList">保存设置</el-button>
-      <el-button :icon="Refresh" type="success" @click="clearFileList">恢复默认设置</el-button>
+      <el-button :icon="MessageBox" type="success" @click="clearFileList" disabled>保存设置</el-button>
+      <el-button :icon="Refresh" type="success" @click="clearFileList" disabled>恢复默认设置</el-button>
   </div>
 
 

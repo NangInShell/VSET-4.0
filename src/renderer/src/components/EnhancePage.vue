@@ -1,7 +1,7 @@
 <template>
     <div class="flex-container">
       <el-switch
-        v-model="value"
+        v-model="useSR"
         size="large"
         active-text="启用超分辨率"
         inactive-text="关闭超分辨率"
@@ -218,35 +218,42 @@
   </template>
   
   <script setup lang="ts">
-  import { ref } from 'vue'
-  
-  const value = ref(true)
-  const SRMethodValue = ref('Real_cugan')
+  import useSrsettingconfigStore from '@renderer/store/SrSettingsStore'
+  import {storeToRefs} from 'pinia'
+  const SrSettingStore = useSrsettingconfigStore()
+  const {
+    useSR,
+    SRMethodValue,
+    RealcuganTileValue,
+    RealcuganInferenceValue,
+    RealcuganModelValue,
+    RealcuganAlphaValue,
+    RealesrganInferenceValue,
+    RealesrganModelValue,
+    RealesrganTileValue,
+    RealesrganScaleValue,
+    Waifu2xInferenceValue,
+    Waifu2xModelValue,
+    Waifu2xTileValue
+  } = storeToRefs(SrSettingStore)
 
-  const RealcuganTileValue = ref('1')
-  const RealcuganInferenceValue = ref('Cuda')
-  const RealcuganModelValue = ref('pro-conservative-up2x')
-  const RealcuganAlphaValue = ref(1)
-
-  const RealesrganInferenceValue=ref('Cuda')
-  const RealesrganModelValue = ref('animevideov3')
-  const RealesrganTileValue = ref('1')
-  const RealesrganScaleValue = ref('2')
-
-  const Waifu2xInferenceValue=ref('Cuda')
-  const Waifu2xModelValue = ref('anime_style_art_rgb_noise0')
-  const Waifu2xTileValue = ref('1')
-
-  
-  import { SRMethod_options, Inference_options, RealcuganModel_options,RealesrganModel_options, VsmlrtTile_options,
-    RealesrganScale_options ,Waifu2xModel_options} from '../store/SRMethod.vue'
-  
-  const changeSelect = (value: string) => {
+  const changeSelect=(value: string) =>{
     RealcuganInferenceValue.value = 'Cuda'; 
     RealesrganInferenceValue.value = 'Cuda'; 
     Waifu2xInferenceValue.value = 'Cuda'; 
     SRMethodValue.value = value; 
   };
+
+  import { SRMethod_options,
+     Inference_options,
+      RealcuganModel_options,
+      RealesrganModel_options, 
+      VsmlrtTile_options,
+    RealesrganScale_options,
+    Waifu2xModel_options
+  } from '../store/SRMethod.vue'
+  
+
   </script>
   
   <style scoped>

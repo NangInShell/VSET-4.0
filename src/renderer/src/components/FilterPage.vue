@@ -1,25 +1,25 @@
 <script setup lang="ts">
-   import { ref } from 'vue'
-
-   const UseResize_BeforeEnhance = ref(false)
-   const UseResize_AfterEnhance= ref(false)
-
-   const ResizeWidth_BeforeEnhance = ref(1920)
-   const ResizeHeight_BeforeEnhance = ref(1080)
-
-   const ResizeWidth_AfterEnhance = ref(3840)
-   const ResizeHeight_AfterEnhance = ref(2160)
 
 
-   const ReduceLeft_BeforeEnhance = ref(0)
-   const ReduceRight_BeforeEnhance = ref(0)
-   const ReduceOn_BeforeEnhance = ref(0)
-   const ReduceDown_BeforeEnhance = ref(0)
-
-   const ReduceLeft_AfterEnhance = ref(0)
-   const ReduceRight_AfterEnhance = ref(0)
-   const ReduceOn_AfterEnhance = ref(0)
-   const ReduceDown_AfterEnhance = ref(0)
+  import useFilterconfigStore from '@renderer/store/FilterStore'
+  import {storeToRefs} from 'pinia'
+  const FilterConfigStore = useFilterconfigStore()
+  const {
+    UseResize_BeforeEnhance,
+    UseResize_AfterEnhance,
+    ResizeWidth_BeforeEnhance,
+    ResizeHeight_BeforeEnhance,
+    ResizeWidth_AfterEnhance,
+    ResizeHeight_AfterEnhance,
+    ReduceLeft_BeforeEnhance,
+    ReduceRight_BeforeEnhance,
+    ReduceOn_BeforeEnhance,
+    ReduceDown_BeforeEnhance,
+    ReduceLeft_AfterEnhance,
+    ReduceRight_AfterEnhance,
+    ReduceOn_AfterEnhance,
+    ReduceDown_AfterEnhance
+  } = storeToRefs(FilterConfigStore)
 
    
 
@@ -43,9 +43,9 @@
 
     <div>
       长度：
-    <el-input-number v-model="ResizeWidth_BeforeEnhance" :min="1" :max="7680" @change="handleChange" />
+    <el-input-number v-model="ResizeWidth_BeforeEnhance" :min="1" :max="7680" />
       宽度：
-    <el-input-number v-model="ResizeHeight_BeforeEnhance" :min="1" :max="4320" @change="handleChange" />
+    <el-input-number v-model="ResizeHeight_BeforeEnhance" :min="1" :max="4320" />
     </div>
   </div>
 
@@ -53,9 +53,9 @@
     <span class="demonstration">视频黑边(左右)</span>
     <div>
       左侧：
-    <el-input-number v-model="ReduceLeft_BeforeEnhance" :min="-1000" :max="1000" @change="handleChange" />
+    <el-input-number v-model="ReduceLeft_BeforeEnhance" :min="-1000" :max="1000" />
       右侧：
-    <el-input-number v-model="ReduceRight_BeforeEnhance" :min="-1000" :max="1000" @change="handleChange" />
+    <el-input-number v-model="ReduceRight_BeforeEnhance" :min="-1000" :max="1000" />
     </div>
   </div>
 
@@ -63,9 +63,9 @@
     <span class="demonstration">视频黑边(上下)</span>
     <div>
       上边：
-    <el-input-number v-model="ReduceOn_BeforeEnhance" :min="-1000" :max="1000" @change="handleChange" />
+    <el-input-number v-model="ReduceOn_BeforeEnhance" :min="-1000" :max="1000" />
       下边：
-    <el-input-number v-model="ReduceDown_BeforeEnhance" :min="-1000" :max="1000" @change="handleChange" />
+    <el-input-number v-model="ReduceDown_BeforeEnhance" :min="-1000" :max="1000"  />
     </div>
   </div>
 
@@ -85,9 +85,9 @@
  
     <div>
       长度：
-    <el-input-number v-model="ResizeWidth_AfterEnhance" :min="1" :max="7680" @change="handleChange" />
+    <el-input-number v-model="ResizeWidth_AfterEnhance" :min="1" :max="7680" />
       宽度：
-    <el-input-number v-model="ResizeHeight_AfterEnhance" :min="1" :max="4320" @change="handleChange" />
+    <el-input-number v-model="ResizeHeight_AfterEnhance" :min="1" :max="4320" />
     </div>
   </div>
 
@@ -95,9 +95,9 @@
     <span class="demonstration">视频黑边(左右)</span>
     <div>
       左侧：
-    <el-input-number v-model="ReduceLeft_AfterEnhance" :min="-1000" :max="1000" @change="handleChange" />
+    <el-input-number v-model="ReduceLeft_AfterEnhance" :min="-1000" :max="1000"  />
       右侧：
-    <el-input-number v-model="ReduceRight_AfterEnhance" :min="-1000" :max="1000" @change="handleChange" />
+    <el-input-number v-model="ReduceRight_AfterEnhance" :min="-1000" :max="1000" />
     </div>
   </div>
 
@@ -105,9 +105,9 @@
     <span class="demonstration">视频黑边(上下)</span>
     <div>
       上边：
-    <el-input-number v-model="ReduceOn_AfterEnhance" :min="-1000" :max="1000" @change="handleChange" />
+    <el-input-number v-model="ReduceOn_AfterEnhance" :min="-1000" :max="1000"  />
       下边：
-    <el-input-number v-model="ReduceDown_AfterEnhance" :min="-1000" :max="1000" @change="handleChange" />
+    <el-input-number v-model="ReduceDown_AfterEnhance" :min="-1000" :max="1000"  />
     </div>
   </div>
 

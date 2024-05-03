@@ -58,7 +58,15 @@
 import { ref } from 'vue';
 import { Delete,UploadFilled} from '@element-plus/icons-vue'
 
-const fileList = ref([]);
+// const fileList = ref([]);
+
+import useInputconfigStore from '@renderer/store/InputStore'
+  import {storeToRefs} from 'pinia'
+  const InputConfigStore = useInputconfigStore()
+  const {
+    fileList
+  } = storeToRefs(InputConfigStore)
+
 
 const openFile = () => {
   document.getElementById('open').click();
