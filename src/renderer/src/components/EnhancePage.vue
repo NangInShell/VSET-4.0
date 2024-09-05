@@ -157,61 +157,6 @@
 
         </div>
 
-        <div class="flex-container" v-if="SRMethodValue === 'Waifu2x'">
-        
-            <div class="slider-demo-block">
-            <span class="demonstration">推理方式(Waifu2x)</span>
-            <el-select
-              v-model="Waifu2xInferenceValue"
-              placeholder="Select"
-              size="large"
-              style="width: 240px"
-            >
-              <el-option
-                v-for="item in Inference_options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </div>
-
-          <div class="slider-demo-block">
-            <span class="demonstration">超分模型(Waifu2x)</span>
-            <el-select
-              v-model="Waifu2xModelValue"
-              placeholder="Select"
-              size="large"
-              style="width: 300px"
-            >
-              <el-option
-                v-for="item in Waifu2xModel_options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </div>
-
-          <div class="slider-demo-block">
-            <span class="demonstration">切割块数量(Waifu2x)</span>
-            <el-select
-              v-model="Waifu2xTileValue"
-              placeholder="Select"
-              size="large"
-              style="width: 240px"
-            >
-              <el-option
-                v-for="item in VsmlrtTile_options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </div>
-
-        </div>
-
 
       </div>
     </div>

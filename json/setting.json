@@ -1,25 +1,22 @@
 {
   "fileList": [
-    "D:/file/BT/allin.vpy",
-    "D:/file/BT/allin_2.vpy",
-    "D:/file/BT/allin_3.vpy",
-    "D:/file/BT/D__file_BT_123.mkv.lwi"
+    "D:/code/VSET_Vue/video/test2.mp4"
   ],
-  "useSR": false,
-  "SRMethodValue": "Real_cugan",
+  "useSR": true,
+  "SRMethodValue": "Real_esrgan",
   "RealcuganTileValue": "1",
   "RealcuganInferenceValue": "Cuda",
   "RealcuganModelValue": "pro-conservative-up2x",
   "RealcuganAlphaValue": 1,
   "RealesrganInferenceValue": "Cuda",
-  "RealesrganModelValue": "animevideov3",
+  "RealesrganModelValue": "animejanaiV2L1",
   "RealesrganTileValue": "1",
   "RealesrganScaleValue": "2",
   "Waifu2xInferenceValue": "Cuda",
   "Waifu2xModelValue": "anime_style_art_rgb_noise0",
   "Waifu2xTileValue": "1",
-  "UseResize_BeforeEnhance": false,
-  "UseResize_AfterEnhance": false,
+  "UseResize_BeforeEnhance": true,
+  "UseResize_AfterEnhance": true,
   "ResizeWidth_BeforeEnhance": 1920,
   "ResizeHeight_BeforeEnhance": 1080,
   "ResizeWidth_AfterEnhance": 3840,
@@ -34,11 +31,11 @@
   "ReduceDown_AfterEnhance": 0,
   "bitValue": 20,
   "crfValue": 16,
-  "encoderValue": "",
-  "qualityValue": "",
+  "encoderValue": "libx265",
+  "qualityValue": "slow",
   "videoContainer": "MP4",
   "AudioContainer": "AAC",
   "isUseCrf": true,
   "isSaveAudio": false,
-  "outputfolder": ""
+  "outputfolder": "D:/file"
 }
