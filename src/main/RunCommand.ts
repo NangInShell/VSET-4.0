@@ -1,4 +1,4 @@
-import { spawn, spawnSync } from 'child_process'
+import { spawn, spawnSync, exec} from 'child_process'
 import path from 'path'
 import { app} from 'electron'
 import { ref } from 'vue'
@@ -26,6 +26,11 @@ function generate_vpy(config_json,videoName) {
   }else{
     vpyContent +='res = core.resize.Bicubic(clip=res,format=vs.YUV420P16)\n'
   }
+
+  vpyContent +='res = core.std.Crop(clip=res,left='+config_json.ReduceLeft_BeforeEnhance+
+                                          ', right='+config_json.ReduceRight_BeforeEnhance+
+                                          ', top='+config_json.ReduceOn_BeforeEnhance+
+                                          ', bottom='+config_json.ReduceDown_BeforeEnhance+')\n'
 
   //超分
   if(config_json.useSR==true){
@@ -91,13 +96,19 @@ function generate_vpy(config_json,videoName) {
   }
 }
 //后置缩放(需要在此改进色彩控制)
-if(config_json.UseResize_AfterEnhance==true){
+if(config_json.UseResize_AfterEnhance== true){
   vpyContent +=
   'res = core.resize.Bicubic(clip=res,width=' + config_json.ResizeWidth_AfterEnhance +
-   ',height=' + config_json.ResizeHeight_AfterEnhance + ',format=vs.YUV420P16)\n'
+   ',height=' + config_json.ResizeHeight_AfterEnhance + ',matrix_s="709", format=vs.YUV420P16)\n'
 }else{
-  vpyContent +='res = core.resize.Bicubic(clip=res,matrix_s="709",format=vs.YUV420P16)\n'
+  vpyContent +='res = core.resize.Bicubic(clip=res, matrix_s="709", format=vs.YUV420P16)\n'
 }
+
+vpyContent +='res = core.std.Crop(clip=res,left='+config_json.ReduceLeft_AfterEnhance+
+                                          ', right='+config_json.ReduceRight_AfterEnhance+
+                                          ', top='+config_json.ReduceOn_AfterEnhance+
+                                          ', bottom='+config_json.ReduceDown_AfterEnhance+')\n'
+
 vpyContent += 'res.set_output()\n'
   return vpyContent
 }
@@ -107,14 +118,47 @@ export async function RunCommand(event, command, config_json): Promise<void> {
   const commandValue = command['_value'];
   const videos = config_json.fileList;
 
-// 转换为格式化的 JSON 字符串
-// const jsonString = JSON.stringify(config_json, null, 2); 
-
 //生成vpy文件
 for (const video of videos){
 const vpyPath = path.join(appPath, "vpyFiles", "vpyFile.vpy");
 const vipipePath=path.join(appPath, "package", "VSPipe.exe");
 const ffmpegPath=path.join(appPath, "package", "ffmpeg.exe");
+const ffprobePath=path.join(appPath, "package", "ffprobe.exe");
+
+const ffprobeCommand = `"${ffprobePath}" -v error -select_streams v:0 -show_entries stream=width,height,avg_frame_rate,nb_frames -of json "${video}"`;
+exec(ffprobeCommand, (error, stdout, stderr) => {
+  if (error) {
+      console.error(`获取视频信息时出错: ${error.message}`);
+      return;
+  }
+
+  if (stderr) {
+      console.error(`ffprobe 错误输出: ${stderr}`);
+      return;
+  }
+
+  try {
+      // 解析 JSON 格式的输出
+      const metadata = JSON.parse(stdout);
+      const videoStream = metadata.streams[0];
+
+      if (videoStream) {
+          const frameCount = videoStream.nb_frames || '未知';
+          const frameRate = videoStream.avg_frame_rate || '未知';
+          const resolution = `${videoStream.width}x${videoStream.height}` || '未知';
+
+          event.sender.send('ffmpeg-output', `正在处理输入视频 ${video} 的信息:\n`)
+          event.sender.send('ffmpeg-output', `帧数(输入): ${frameCount}\n`)
+          event.sender.send('ffmpeg-output', `帧率(输入): ${frameRate}\n`)
+          event.sender.send('ffmpeg-output', `分辨率(输入): ${resolution}\n`)
+      } else {
+          console.log(`视频 ${video} 没有找到视频流`);
+      }
+  } catch (parseError) {
+      console.error(`解析视频信息时出错`);
+  }
+});
+
 const vpyFile = generate_vpy(config_json,video)
 fs.writeFileSync(vpyPath, vpyFile);
 
