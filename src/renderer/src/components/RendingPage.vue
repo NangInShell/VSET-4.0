@@ -8,10 +8,9 @@
       <el-button type="success" @click="StartSR">测试</el-button>
     </div>
 
-    <!-- 确保只有一个 n-log 实例 -->
     <n-space vertical>
       <n-log
-        ref="logInst"
+        ref="logInstRef"
         :log="inputData"
         language="naive-log"
         trim
