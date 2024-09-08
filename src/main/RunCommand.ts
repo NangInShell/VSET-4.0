@@ -10,6 +10,49 @@ const fs = require('fs');
 
 let child
 
+function generate_cmd(config_json,vipipePath,vpyPath,ffmpegPath,video){
+  let cmd = '"'+vipipePath+'"'+' "-c" "y4m" '+'"'+vpyPath+'" "-" | '+'"'+ffmpegPath+'" "-hide_banner" "-y" "-i" "pipe:" "-i" "'+
+  video+'"'+' "-map" "0:v:0" "-map" "1:a" "-c:v" '+'"'+config_json.encoderValue+'" '
+
+if(config_json.encoderValue=='libx265'){
+cmd +='"-pix_fmt" "yuv420p10le" "-profile:v" "main10" "-vtag" "hvc1" '
+}
+if(config_json.encoderValue=='libx264'){
+cmd +='"-pix_fmt" "yuv420p" "-profile:v" "main" '
+}
+if(config_json.encoderValue=='libaom-av1'){
+cmd +='"-pix_fmt" "yuv420p10le" '
+}
+if(config_json.encoderValue=='h264_nvenc'){
+cmd +='"-pix_fmt" "yuv420p" '
+}
+if(config_json.encoderValue=='hevc_nvenc'){
+cmd +='"-pix_fmt" "p010le" "-profile:v" "main10" "-vtag" "hvc1" '
+}
+if(config_json.encoderValue=='av1_nvenc'){
+cmd +='"-pix_fmt" "p010le" '
+}
+
+cmd+='-preset '+'"'+config_json.qualityValue+'" '
+if(config_json.isUseCrf==true){
+cmd+='"-crf" '+'"'+config_json.crfValue+'" '
+}
+else{
+cmd+='"-b:v" '+'"'+config_json.bitValue+'M" '
+}
+
+if(config_json.isSaveAudio==true){
+cmd+='"-c:a" "copy" '
+}
+else{
+cmd+='"-c:a" '+'"'+config_json.AudioContainer.toLowerCase()+'" '
+}
+
+
+//最终cmd命令
+cmd += '"'+config_json.outputfolder+'/'+path.parse(path.basename(video)).name+'_enhance'+'.'+config_json.videoContainer.toLowerCase()+'"'
+return cmd
+}
 
 function generate_vpy(config_json,videoName) {
   let vpyContent = '';
@@ -108,7 +151,6 @@ vpyContent +='res = core.std.Crop(clip=res,left='+config_json.ReduceLeft_AfterEn
                                           ', right='+config_json.ReduceRight_AfterEnhance+
                                           ', top='+config_json.ReduceOn_AfterEnhance+
                                           ', bottom='+config_json.ReduceDown_AfterEnhance+')\n'
-
 vpyContent += 'res.set_output()\n'
   return vpyContent
 }
@@ -152,6 +194,8 @@ exec(ffprobeCommand, (error, stdout, stderr) => {
           event.sender.send('ffmpeg-output', `帧数(输入): ${frameCount}\n`)
           event.sender.send('ffmpeg-output', `帧率(输入): ${frameRate}\n`)
           event.sender.send('ffmpeg-output', `分辨率(输入): ${resolution}\n`)
+
+      
       } else {
           console.log(`视频 ${video} 没有找到视频流`);
       }
@@ -200,47 +244,9 @@ exec(vspipeInfoCommand, (error, stdout, stderr) => {
    event.sender.send('ffmpeg-output', `FPS: ${info.fps}\n`)
 });
 
-let cmd = '"'+vipipePath+'"'+' "-c" "y4m" '+'"'+vpyPath+'" "-" | '+'"'+ffmpegPath+'" "-hide_banner" "-y" "-i" "pipe:" "-i" "'+
-          video+'"'+' "-map" "0:v:0" "-map" "1:a" "-c:v" '+'"'+config_json.encoderValue+'" '
+const cmd = generate_cmd(config_json,vipipePath,vpyPath,ffmpegPath,video)
 
-if(config_json.encoderValue=='libx265'){
-  cmd +='"-pix_fmt" "yuv420p10le" "-profile:v" "main10" "-vtag" "hvc1" '
-}
-if(config_json.encoderValue=='libx264'){
-  cmd +='"-pix_fmt" "yuv420p" "-profile:v" "main" '
-}
-if(config_json.encoderValue=='libaom-av1'){
-  cmd +='"-pix_fmt" "yuv420p10le" '
-}
-if(config_json.encoderValue=='h264_nvenc'){
-  cmd +='"-pix_fmt" "yuv420p" '
-}
-if(config_json.encoderValue=='hevc_nvenc'){
-  cmd +='"-pix_fmt" "p010le" "-profile:v" "main10" "-vtag" "hvc1" '
-}
-if(config_json.encoderValue=='av1_nvenc'){
-  cmd +='"-pix_fmt" "p010le" '
-}
-
-cmd+='-preset '+'"'+config_json.qualityValue+'" '
-if(config_json.isUseCrf==true){
-  cmd+='"-crf" '+'"'+config_json.crfValue+'" '
-}
-else{
-  cmd+='"-b:v" '+'"'+config_json.bitValue+'M" '
-}
-
-if(config_json.isSaveAudio==true){
-  cmd+='"-c:a" "copy" '
-}
-else{
-  cmd+='"-c:a" '+'"'+config_json.AudioContainer.toLowerCase()+'" '
-}
-
-
-//最终cmd命令
-cmd += '"'+config_json.outputfolder+'/'+path.parse(path.basename(video)).name+'_enhance'+'.'+config_json.videoContainer.toLowerCase()+'"'
-  event.sender.send('ffmpeg-output', `Executing command: ${cmd}\n`)
+event.sender.send('ffmpeg-output', `Executing command: ${cmd}\n`)
 // 开始运行
   child = spawn(cmd, { shell: true })
 
